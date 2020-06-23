@@ -1,40 +1,40 @@
 import React, {Component, useState} from 'react';
 import './App.css';
 import Person from './Person/Person';
+import Radium from 'radium';
 
 //capitalize app can also solve the problem
 class App extends Component {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   state = {
     persons:[
-      {name: 'Max', age: 28},
-      {name: 'Menu', age: 29},
-      {name: 'Stephanie', age: 26},
+      { id: 'uniqueId1', name: 'Max', age: 28},
+      { id: 'uniqueid2', name: 'Menu', age: 29},
+      { id: 'uniqueID3', name: 'Stephanie', age: 26},
     ],
       otherStates: "some other value",
       showPersons: false
   };
 
-  //function inside function
-  switchNameHandler = (newName) => {
-  // console.log("was clicked");
-    this.setState({
-      persons: [
-        {name:newName,age:38},
-        {name:'Menu',age:29},
-        {name:'Stephanie',age:27},
-      ]
-    })
-  };
+  deletePersonHandler  = (personIndex) => {
+      const newPersons = [...this.state.persons];
+      newPersons.splice(personIndex,1);
+      this.setState({persons: newPersons});
+  }
 
-   nameChangeHandler = (event) => {
-       this.setState({
-           persons: [
-               {name: 'Max', age: 38},
-               {name: event.target.value, age: 29},
-               {name: 'Stephanie', age: 27},
-           ]
-       })
+   nameChangeHandler = (event,id) => {
+      const personIndex = this.state.persons.findIndex(p => {
+          return p.id === id;
+      });
+
+      const person = {...this.state.persons[personIndex]};
+      // const person = Object.assign({},this.state.persons[personIndex]);
+
+       person.name = event.target.value;
+
+       const newPersons = [...this.state.persons];
+       newPersons[personIndex] = person;
+       this.setState({persons: newPersons})
    }
 
   togglePersonsHandler = () => {
@@ -44,38 +44,51 @@ class App extends Component {
 
     render() {
         const styleStyle = {
-            backgroundColor:'white',
+            backgroundColor:'green',
+            color:'white',
             font: 'inherit',
             border: '1px solid blue',
             padding: '8px',
             cursor: 'pointer'
         };
 
-       return (
-        <div className="App">
-            <h1>Hi, I'm a Re0act App.</h1>
-            <p>This is really working!</p>
-            <button
-                onClick={this.togglePersonsHandler}
-                style={styleStyle}>Switch Name</button>
-            {this.state.showPersons ?
+        let persons = null;
+        // now we are in js rather than jsx, so we can use if() here
+        if (this.state.showPersons) {
+            persons = (
                 <div>
-                <Person
-                    name={this.state.persons[0].name}
-                    age={this.state.persons[0].age}>My Habbies: Racing</Person>
-                <Person
-                    name={this.state.persons[1].name}
-                    age={this.state.persons[1].age}
-                    click={this.switchNameHandler.bind(this,"Max!!")}
-                    changedd={this.nameChangeHandler}
-                />
-                <Person
-                    name={this.state.persons[2].name}
-                    age={this.state.persons[2].age}/>
-            </div> : null
-            }
-        </div>
-    );
+                    {this.state.persons.map((person,index) => {
+                        return <Person name={person.name} age={person.age} key={person.id}
+                                       changedd={(event) => this.nameChangeHandler(event,person.id)}
+                                       click={() => this.deletePersonHandler(index)}/>
+                    })}
+                </div>
+            ) ;
+
+            styleStyle.backgroundColor = 'red';
+            console.log('In js');
+        }
+
+        const classes = [];
+        if(this.state.persons.length <= 2) {
+            classes.push('red'); // classes = ['red']
+        }
+        if(this.state.persons.length <= 1) {
+            classes.push('bold'); // classes = ['red',bold]
+        }
+
+
+        //things in return is jsx, so cannot use if
+       return (
+            <div className="App">
+                <h1>Hi, I'm a Re0act App.</h1>
+                <p className={classes.join(' ')}>This is really working!</p>
+                <button
+                    onClick={this.togglePersonsHandler}
+                    style={styleStyle}>Toggle Persons</button>
+                {persons}
+            </div>
+        );
     }
 
 
