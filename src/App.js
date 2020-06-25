@@ -1,7 +1,8 @@
 import React, {Component, useState} from 'react';
-import './App.css';
 import Person from './Person/Person';
-import Radium from 'radium';
+import './App.css';
+
+
 
 //capitalize app can also solve the problem
 class App extends Component {
@@ -17,7 +18,6 @@ class App extends Component {
   };
 
   deletePersonHandler  = (personIndex) => {
-
       const newPersons = [...this.state.persons];
       newPersons.splice(personIndex,1);
       this.setState({persons: newPersons});
@@ -29,7 +29,7 @@ class App extends Component {
       });
 
       const person = {...this.state.persons[personIndex]};
-      // const person = Object.assign({},this.state.persons[personIndex]);
+      // const person = .assign({},this.state.persons[personIndex]);
 
        person.name = event.target.value;
 
@@ -50,7 +50,11 @@ class App extends Component {
             font: 'inherit',
             border: '1px solid blue',
             padding: '8px',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            ':hover':{
+                backgroundColor: 'lightgreen',
+                color: 'black'
+            }
         };
 
         let persons = null;
@@ -67,6 +71,10 @@ class App extends Component {
             ) ;
 
             styleStyle.backgroundColor = 'red';
+            styleStyle[':hover'] = {
+                backgroundColor: 'salmon',
+                    color: 'black'
+            }
             console.log('In js');
         }
 
@@ -81,15 +89,15 @@ class App extends Component {
 
         //things in return is jsx, so cannot use if
        return (
-            <div className="App">
-                <h1>Hi, I'm a Re0act App.</h1>
-                <p className={classes.join(' ')}>This is really working!</p>
-                <button
-                    onClick={this.togglePersonsHandler}
-                    style={styleStyle}>Toggle Persons</button>
-                {persons}
-            </div>
-        );
+           <div className="App">
+               <h1>Hi, I'm a Re0act App.</h1>
+               <p className={classes.join(' ')}>This is really working!</p>
+               <button
+                   onClick={this.togglePersonsHandler}
+                   style={styleStyle}>Toggle Persons</button>
+               {persons}
+           </div>
+       );
     }
 
 
