@@ -1,8 +1,20 @@
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
+import styled from "styled-components";
 import Person from './Person/Person';
 import './App.css';
 
-
+const StyledButton = styled.button`
+    background-color:green;
+    color:white;
+    font: inherit;
+    border: 1px solid blue;
+    padding: 8px;
+    cursor: pointer;
+    &:hover{
+        background-color: lightgreen;
+        color: black;
+    }
+`
 
 //capitalize app can also solve the problem
 class App extends Component {
@@ -92,9 +104,7 @@ class App extends Component {
            <div className="App">
                <h1>Hi, I'm a Re0act App.</h1>
                <p className={classes.join(' ')}>This is really working!</p>
-               <button
-                   onClick={this.togglePersonsHandler}
-                   style={styleStyle}>Toggle Persons</button>
+               <StyledButton onClick={this.togglePersonsHandler}>Toggle Persons</StyledButton>
                {persons}
            </div>
        );
